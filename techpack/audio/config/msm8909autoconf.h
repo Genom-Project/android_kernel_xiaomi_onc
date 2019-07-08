@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2018-2019, The Linux Foundation. All rights reserved.
  * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #define CONFIG_SND_SOC_CPE 1
 #define CONFIG_SND_SOC_MSM8909 1
 #define CONFIG_SND_SOC_BG_8909 1
+#define CONFIG_SND_SOC_8909_DIG_CDC 1
 #define CONFIG_SND_SOC_I2C_AND_SPI 1
 #define CONFIG_SND_SOC_BG_CODEC 1
 #define CONFIG_SND_SOC_ANALOG_CDC 1
@@ -44,6 +45,7 @@
 #define CONFIG_SOUNDWIRE 1
 #define CONFIG_SOUNDWIRE_WCD_CTRL 1
 #define CONFIG_SND_HWDEP_ROUTING 1
+#define CONFIG_SND_SOC_SDM660_CDC 1
 #define CONFIG_SND_SOC_MSM_HDMI_CODEC_RX 1
 #define CONFIG_SND_SOC_WCD9335 1
 #define CONFIG_SND_SOC_WSA881X 1
