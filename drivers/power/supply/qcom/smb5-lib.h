@@ -73,6 +73,8 @@ enum print_reason {
 #define AICL_THRESHOLD_VOTER		"AICL_THRESHOLD_VOTER"
 #define MOISTURE_VOTER			"MOISTURE_VOTER"
 #define USBOV_DBC_VOTER			"USBOV_DBC_VOTER"
+#define FCC_STEPPER_VOTER		"FCC_STEPPER_VOTER"
+#define CHG_TERMINATION_VOTER		"CHG_TERMINATION_VOTER"
 
 #define THERMAL_CONFIG_FB		1
 #define XIAOMI_CHARGER_RUNIN 	//lct add for xiaomi RUNIN 20181105
@@ -108,6 +110,7 @@ enum {
 	WEAK_ADAPTER_WA			= BIT(1),
 	MOISTURE_PROTECTION_WA		= BIT(2),
 	USBIN_OV_WA			= BIT(3),
+	CHG_TERMINATION_WA		= BIT(4),
 };
 
 enum {
@@ -349,6 +352,7 @@ struct smb_charger {
 	struct work_struct	pl_update_work;
 	struct work_struct	jeita_update_work;
 	struct work_struct	moisture_protection_work;
+	struct work_struct	chg_termination_work;
 	struct delayed_work	ps_change_timeout_work;
 	struct delayed_work	clear_hdc_work;
 	struct delayed_work	icl_change_work;
@@ -359,6 +363,7 @@ struct smb_charger {
 
 	/* alarm */
 	struct alarm		moisture_protection_alarm;
+	struct alarm		chg_termination_alarm;
 
 	/* pd */
 	int			voltage_min_uv;
@@ -413,6 +418,10 @@ struct smb_charger {
 	bool			aicl_max_reached;
 	bool			moisture_present;
 	bool			moisture_protection_enabled;
+	bool			fcc_stepper_enable;
+	int			charge_full_cc;
+	int			cc_soc_ref;
+	int			last_cc_soc;
 
 	#ifdef THERMAL_CONFIG_FB
 	struct notifier_block notifier;
