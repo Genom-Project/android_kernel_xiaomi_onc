@@ -46,7 +46,7 @@ cd ..
 # For MIUI Build
 # Credit Adek Maulana <adek@techdro.id>
 OUTDIR="$KERNEL_DIR/out/"
-VENDOR_MODULEDIR="$KERNEL_DIR/AnyKernel2/modules/vendor/lib/modules"
+VENDOR_MODULEDIR="$KERNEL_DIR/AnyKernel3/modules/vendor/lib/modules"
 STRIP="$KERNEL_DIR/stock/bin/$(echo "$(find "$KERNEL_DIR/stock/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
             sed -e 's/gcc/strip/')"
 for MODULES in $(find "${OUTDIR}" -name '*.ko'); do
