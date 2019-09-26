@@ -127,7 +127,9 @@ static int wcd_check_cross_conn(struct wcd_mbhc *mbhc)
 	enum wcd_mbhc_plug_type plug_type = MBHC_PLUG_TYPE_NONE;
 	s16 reg1 = 0;
 	bool hphl_sch_res = 0, hphr_sch_res = 0;
-
+	//add-begin by zad for headset noise when inserting 
+	return false;
+	//add-end
 	if (wcd_swch_level_remove(mbhc)) {
 		pr_debug("%s: Switch level is low\n", __func__);
 		return -EINVAL;
@@ -317,7 +319,13 @@ static void wcd_enable_mbhc_supply(struct wcd_mbhc *mbhc,
 				wcd_enable_curr_micbias(mbhc,
 						WCD_MBHC_EN_PULLUP);
 			} else {
+//Add-begin by zad 20181102 for selfie stick
+			#if 1
+				wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
+			#else
 				wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
+			#endif
+//Add-end
 			}
 		} else if (plug_type == MBHC_PLUG_TYPE_HEADPHONE) {
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
@@ -466,10 +474,16 @@ static void wcd_correct_swch_plug(struct work_struct *work)
 	 * no need to enabale micbias/pullup here
 	 */
 
-	wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
-
+//add start by zad for playing music is interrupted when headset was inserting sometimes
+	WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_FSM_EN, 0);
+//add end
+	wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);	
+	
 	/* Enable HW FSM */
 	WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_FSM_EN, 1);
+//add start by zad for playing music is interrupted when headset was inserting sometimes
+	msleep(20);
+//add end
 	/*
 	 * Check for any button press interrupts before starting 3-sec
 	 * loop.
@@ -735,7 +749,7 @@ report:
 	WCD_MBHC_RSC_UNLOCK(mbhc);
 enable_supply:
 	if (mbhc->mbhc_cb->mbhc_micbias_control)
-		wcd_mbhc_update_fsm_source(mbhc, plug_type);
+		wcd_mbhc_update_fsm_source(mbhc, plug_type);			
 	else
 		wcd_enable_mbhc_supply(mbhc, plug_type);
 exit:
