@@ -309,6 +309,7 @@ int qg_write_monotonic_soc(struct qpnp_qg *chip, int msoc)
 	return rc;
 }
 
+extern char* Get_BatID(void);
 int qg_get_battery_temp(struct qpnp_qg *chip, int *temp)
 {
 	int rc = 0;
@@ -319,12 +320,25 @@ int qg_get_battery_temp(struct qpnp_qg *chip, int *temp)
 		return 0;
 	}
 
-	rc = qpnp_vadc_read(chip->vadc_dev, VADC_BAT_THERM_PU2, &result);
-	if (rc) {
-		pr_err("Failed reading adc channel=%d, rc=%d\n",
-					VADC_BAT_THERM_PU2, rc);
-		return rc;
+	if(!strcmp(Get_BatID(), "battery_30k")){
+		rc = qpnp_vadc_read(chip->vadc_dev, VADC_BAT_THERM_PU1, &result);
+        if (rc) {
+            printk(KERN_ERR "Failed reading adc channel=%d, rc=%d\n",
+                                    VADC_BAT_THERM_PU1, rc);
+            return rc;
+        }
+
+	}else{
+		rc = qpnp_vadc_read(chip->vadc_dev, VADC_BAT_THERM_PU2, &result);
+        if (rc) {
+            printk(KERN_ERR "Failed reading adc channel=%d, rc=%d\n",
+                                    VADC_BAT_THERM_PU2, rc);
+            return rc;
+        }
+
 	}
+
+
 	pr_debug("batt_temp = %lld meas = 0x%llx\n",
 			result.physical, result.measurement);
 

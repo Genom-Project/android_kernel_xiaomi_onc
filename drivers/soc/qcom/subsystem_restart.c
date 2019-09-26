@@ -1190,6 +1190,11 @@ static void device_restart_work_hdlr(struct work_struct *work)
 							dev->desc->name);
 }
 
+// xuke @ 20180611	Import pstore patch from XiaoMi.	Begin
+extern int download_mode;
+extern int in_panic;
+// End
+
 int subsystem_restart_dev(struct subsys_device *dev)
 {
 	const char *name;
@@ -1214,7 +1219,15 @@ int subsystem_restart_dev(struct subsys_device *dev)
 		pr_err("%s crashed during a system poweroff/shutdown.\n", name);
 		return -EBUSY;
 	}
+// xuke @ 20180611	Import pstore patch from XiaoMi.	Begin
+	if(download_mode == 0) {
+		dev->restart_level = 1;
+		in_panic = 1;
+	}
 
+// Add ssr feature by jianglei for checking nv begin 20181220
+       dev->restart_level = 1;
+// Add ssr feature by jianglei for checking nv end 20181220
 	pr_info("Restart sequence requested for %s, restart_level = %s.\n",
 		name, restart_levels[dev->restart_level]);
 

@@ -254,10 +254,14 @@ static int mdss_pll_probe(struct platform_device *pdev)
 		pr_err("Unable to get the cell-index rc=%d\n", rc);
 		pll_res->index = 0;
 	}
-
-	pll_res->ssc_en = of_property_read_bool(pdev->dev.of_node,
-						"qcom,dsi-pll-ssc-en");
-
+/*  disable ssc
+//add by wuningxia - disable ssc for truly LCD
+	p= strstr(boot_command_line, "mdss_dsi_truly_otm1901a_720p_video");
+	if(!p) {
+		pll_res->ssc_en = of_property_read_bool(pdev->dev.of_node,
+							"qcom,dsi-pll-ssc-en");
+	}
+*/
 	if (pll_res->ssc_en) {
 		pr_info("%s: label=%s PLL SSC enabled\n", __func__, label);
 

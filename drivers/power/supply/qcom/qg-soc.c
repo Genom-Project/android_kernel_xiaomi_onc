@@ -118,6 +118,20 @@ static void get_next_update_time(struct qpnp_qg *chip)
 
 static bool is_scaling_required(struct qpnp_qg *chip)
 {
+	int batt_curr = 0,rc = 0;
+	rc = qg_get_battery_current(chip,&batt_curr);
+	if(rc >= 0)
+	{
+		if(chip->catch_up_soc < chip->msoc && is_usb_present(chip) && batt_curr < 0 )
+			return false;
+	}
+
+	if(rc >= 0)
+	{
+		if(chip->catch_up_soc > chip->msoc && is_usb_present(chip) && batt_curr == 0 )
+			return false;
+	}
+
 	if (!chip->profile_loaded)
 		return false;
 
